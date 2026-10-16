@@ -1,0 +1,57 @@
+{
+  "info": {
+    "name": "Todo API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "todoId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "1. List todos (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', () => pm.response.to.have.status(200));", "pm.test('array', () => pm.expect(pm.response.json()).to.be.an('array'));"] } }],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/todos" }
+    },
+    {
+      "name": "2. Create todo (201)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('201', () => pm.response.to.have.status(201));", "pm.collectionVariables.set('todoId', pm.response.json().id);"] } }],
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/todos", "body": { "mode": "raw", "raw": "{\"title\":\"Complete internship assessment\"}" } }
+    },
+    {
+      "name": "3. Create whitespace title (400)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('400', () => pm.response.to.have.status(400));"] } }],
+      "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/todos", "body": { "mode": "raw", "raw": "{\"title\":\"   \"}" } }
+    },
+    {
+      "name": "4. Get existing todo (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', () => pm.response.to.have.status(200));"] } }],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/todos/{{todoId}}" }
+    },
+    {
+      "name": "5. Get missing todo (404)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('404', () => pm.response.to.have.status(404));"] } }],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/todos/999999" }
+    },
+    {
+      "name": "6. Mark complete (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', () => pm.response.to.have.status(200));", "pm.test('completed', () => pm.expect(pm.response.json().completed).to.eql(true));"] } }],
+      "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/todos/{{todoId}}", "body": { "mode": "raw", "raw": "{\"completed\":true}" } }
+    },
+    {
+      "name": "7. Change title (200)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('200', () => pm.response.to.have.status(200));", "pm.test('title', () => pm.expect(pm.response.json().title).to.eql('Updated title'));"] } }],
+      "request": { "method": "PUT", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/api/todos/{{todoId}}", "body": { "mode": "raw", "raw": "{\"title\":\"Updated title\"}" } }
+    },
+    {
+      "name": "8. Delete todo (204)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('204', () => pm.response.to.have.status(204));"] } }],
+      "request": { "method": "DELETE", "url": "{{baseUrl}}/api/todos/{{todoId}}" }
+    },
+    {
+      "name": "9. Get deleted todo (404)",
+      "event": [{ "listen": "test", "script": { "type": "text/javascript", "exec": ["pm.test('404', () => pm.response.to.have.status(404));"] } }],
+      "request": { "method": "GET", "url": "{{baseUrl}}/api/todos/{{todoId}}" }
+    }
+  ]
+}
