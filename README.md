@@ -1,6 +1,20 @@
 # Todo API (backend)
 
-Express + TypeScript REST API backed by PostgreSQL.
+REST API for the to-do list app. This repository is the **backend**; the React UI is in the companion frontend repository:
+
+- Backend: https://github.com/eaindraysupan1005/todo-backend
+- Frontend: https://github.com/eaindraysupan1005/todo-frontend
+
+## Features
+
+- Full CRUD for todos (create, list, get one, update title and/or completion, delete)
+- Input validation (blank, whitespace-only or over-255-character titles return `400`) and consistent `{ "error": "..." }` responses
+- Parameterized SQL queries, CORS configured via environment variable
+- Postman collection with positive and negative tests
+
+## Tech stack
+
+Node.js, Express, TypeScript, `pg`, PostgreSQL (local or Supabase).
 
 ## Setup
 
@@ -22,6 +36,8 @@ npm install
 npm run db:init   # applies schema.sql
 npm run dev       # http://localhost:3000
 ```
+
+Start this backend first, then run the frontend (see its README). `.env` is git-ignored; never commit real credentials.
 
 Production: `npm run build && npm start`.
 
